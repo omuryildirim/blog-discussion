@@ -14,7 +14,7 @@
     "uuid": "^9.0.0"
   },
   "scripts": {
-    "dev": "nodemon --ignore './src' server/server.js",
+    "dev": "nodemon --ignore './src' server/server.js"
   },
   "devDependencies": {
     "eslint-plugin-ghost": "^2.15.1",

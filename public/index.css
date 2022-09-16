@@ -132,20 +132,28 @@ body {
 .action-button .upvote-icon {
     font-weight: 600;
     font-size: 10px;
-    line-height: 10px;
-    display: inline-block;
-    align-items: center;
-    margin-right: 5px;
+    display: inline;
+    margin-right: 10px;
 }
 
 .action-button .action-button-text {
-    width: 39px;
-    height: 13px;
     font-weight: 600;
     font-size: 11px;
-    line-height: 13px;
-    display: inline-block;
+    display: inline;
 }
+
+.action-button.upvoted {
+    color: #4f9deb;
+}
+
+.action-button .points {
+    position: absolute;
+    margin-left: 9px;
+    font-size: 10px;
+    margin-top: 6px;
+    font-weight: 600;
+}
+
 
 .divider {
     display: inline-block;

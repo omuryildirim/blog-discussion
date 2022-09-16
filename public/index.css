@@ -1,3 +1,174 @@
 html, body {
+    font-family: 'Inter';
+    background: #e5e5e5;
+}
+
+body {
     margin: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+.container {
+    position: relative;
+    width: 783px;
+    height: 716px;
+    background: #FFFFFF;
+    margin: 30px auto auto;
+    padding: 38px 49px;
+}
+
+.header {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+    color: #000000;
+    margin-bottom: 31px;
+}
+
+.avatar {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background: #0234fe;
+    border-radius: 42.25px;
+}
+
+.comment {
+    display: flex;
+}
+
+#comments-section .comment {
+    margin-bottom: 32px;
+}
+
+.comment .text-input {
+    display: inline-block;
+    width: 542px;
+    height: 30px;
+    background: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px;
+    padding: 0 10px;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 150.02%;
+    margin: 0 12px;
+    color: #21293C;
+}
+
+.comment .comment-button {
+    width: 83px;
+    height: 30px;
+    background: #7E34F7;
+    border-radius: 4px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+}
+
+.comment .comment-button:hover {
+    background: #5f27be;
+}
+
+.comment .comment-button span {
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 150.02%;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.comment .comment-body {
+    display: inline-block;
+    width: 643px;
+    margin-left: 12px;
+}
+
+.comment .comment-header {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 16px;
+    color: #21293C;
+}
+
+.comment .comment-time-ago {
+    display: inline-block;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 13px;
+    color: #4B587C;
+}
+
+.comment .message {
+    display: inline-block;
+    width: 643px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    color: #21293C;
+    margin-bottom: 10px;
+    margin-top: 4px;
+}
+
+.action-button {
+    display: inline-block;
+    margin-right: 28px;
+    cursor: pointer;
+    color: #4B587C;
+}
+
+.action-button:hover {
+    color: #b4b4b4;
+}
+
+.action-button .upvote-icon {
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 10px;
+    display: inline-block;
+    align-items: center;
+    margin-right: 5px;
+}
+
+.action-button .action-button-text {
+    width: 39px;
+    height: 13px;
+    font-weight: 600;
+    font-size: 11px;
+    line-height: 13px;
+    display: inline-block;
+}
+
+.divider {
+    display: inline-block;
+    width: 680px;
+    height: 0;
+    border-bottom: 1px solid #E5E5E5;
+    margin: 44px 0;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZFhiI2B.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }

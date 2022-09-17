@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  useRoutes,
 } from "react-router-dom";
-import Discussion from "./discussion";
 import {theme} from "./theme";
 import {Box, CircularProgress, CssBaseline, ThemeProvider} from "@mui/material";
-
-const AppRoutes = () => {
-  return useRoutes([
-    { path: "/", element: <Discussion /> },
-  ]);
-};
+import {Routes} from "./routes";
 
 const App = () => {
   const [comments, setComments] = useState(null);
+
+  if (!comments) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <Routes />
+        </Router>
+      </ThemeProvider>
+    )
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>

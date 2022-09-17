@@ -1,6 +1,8 @@
 "use strict";
 
 const createCommentBody = () => {
+// Global variables
+let user;
 
 // HTTP functions
 const get = async (url) => {
@@ -73,7 +75,7 @@ const createUpvoteButton = () => {
     return actionButton;
 }
 
-document.getElementById("comment-button").addEventListener("click", event => {
+const addCommentToHTML = (data) => {
     const comment = document.createElement("div");
     comment.className = "comment";
 
@@ -81,33 +83,42 @@ document.getElementById("comment-button").addEventListener("click", event => {
     avatar.className = "avatar";
 
     comment.appendChild(avatar);
-    comment.appendChild(createCommentBody());
+    comment.appendChild(createCommentBody(data));
 
     const commentSection = document.getElementById("comments-section");
     commentSection.insertBefore(comment, commentSection.firstChild);
-
-    return true;
-});
+}
 
 // Upvote
 const upvote = (event) => {
-    if (event.currentTarget.className.indexOf("upvoted") < 0) {
-        event.currentTarget.className += " upvoted";
-        event.currentTarget.querySelector(".action-button-text").textContent = "Upvoted";
+    const target = event.currentTarget;
+    post(`/api/comment/${target.dataset.id}/upvote`, {upvoter: user._id}).then(data => {
+        if (target.className.indexOf("upvoted") < 0) {
+            target.className += " upvoted";
+            target.querySelector(".action-button-text").textContent = "Upvoted";
 
-        let points = event.currentTarget.querySelector(".points");
+            let points = target.querySelector(".points");
 
-        if (points) {
-            points.textContent = parseInt(points.textContent) + 1;
-        } else {
-            points = document.createElement("div");
-            points.className = "points";
-            points.textContent = "1";
-            event.currentTarget.insertBefore(points, event.currentTarget.firstChild);
+            if (points) {
+                points.textContent = data.upvotes.length;
+            } else {
+                points = document.createElement("div");
+                points.className = "points";
+                points.textContent = data.upvotes.length;
+                target.insertBefore(points, target.firstChild);
+            }
         }
-    }
+    });
+
 }
 
 document.querySelectorAll(".upvote-button").forEach(element => {
     element.addEventListener("click", event => upvote(event));
+// On click events
+document.getElementById("comment-button").addEventListener("click", event => {
+    post("/api/comment", {
+        userid: user._id,
+        message: document.getElementById("text-input").value
+    }).then(data => addCommentToHTML(data));
+});
 });

@@ -2,6 +2,7 @@
 
 const createCommentBody = () => {
 // Global variables
+let users;
 let user;
 
 // HTTP functions
@@ -121,4 +122,22 @@ document.getElementById("comment-button").addEventListener("click", event => {
         message: document.getElementById("text-input").value
     }).then(data => addCommentToHTML(data));
 });
+
+// Load users
+get("/api/users").then((data) => {
+    users = data;
 });
+
+// Load comments
+const loadComments = () => get("/api/comments").then(comments => {
+    comments.sort((c1, c2) => c1.timestamp > c2.timestamp ? 1:-1);
+    comments.forEach(comment => addCommentToHTML(comment));
+});
+
+// Load userdata
+get("/api/user").then(data => {
+    document.getElementById("add-comment").querySelector(".avatar").style.backgroundImage = `url(public/images/${data.image})`;
+    user = data;
+    loadComments();
+});
+

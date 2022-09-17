@@ -31,4 +31,14 @@ module.exports = (router) => {
       res.status(200).send(comment);
     });
   });
+
+  router.get('/comments', (req, res) => {
+    Comment.find({}, (error, comments) => {
+      if (error) {
+        res.status(500).send(JSON.stringify(error));
+      }
+
+      res.status(200).send(comments);
+    });
+  });
 };

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
-  userid: {
+  userId: {
     type: String,
     trim: true,
     required: true,
@@ -12,12 +12,20 @@ const CommentSchema = new Schema({
     trim: true,
     required: true
   },
+  replies: [{
+    type: String,
+    required: true
+  }],
   upvotes: [{
     type: String,
     required: true
   }],
   timestamp: {
     type: Number,
+    required: true
+  },
+  isReply: {
+    type: Boolean,
     required: true
   }
 });

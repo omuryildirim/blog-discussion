@@ -3,21 +3,35 @@ import React, { useState } from "react";
 import {UserAvatar} from "../avatar";
 import axios from "axios";
 
-export const AddComment = ({user: {image, _id, name}, pushComment}) => {
+export const AddComment = ({user: {image, _id, name}, pushComment, isReply, parentId}) => {
     const [message, setMessage] = useState("");
 
     const addComment = () => {
-        axios.post('/api/comment', {
-            userid: _id,
-            message
-          })
-          .then((response) => {
-            pushComment(response.data);
-            setMessage("");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        if (isReply) {
+            axios.post(`/api/comment/${parentId}/reply`, {
+                userId: _id,
+                message
+              })
+              .then((response) => {
+                pushComment(response.data);
+                setMessage("");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        } else {
+            axios.post('/api/comment', {
+                userId: _id,
+                message
+              })
+              .then((response) => {
+                pushComment(response.data);
+                setMessage("");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        }
     }
 
     return (

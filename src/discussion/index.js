@@ -7,12 +7,13 @@ import axios from "axios";
 
 const Discussion = () => {
   const [comments, setComments] = useState(null);
+  const [replies, setReplies] = useState(null);
   const [users, setUsers] = useState(null);
   const [user, setUser] = useState(null);
   const pushComment = useCallback((comment) => {
       setComments([comment, ...comments]);
   });
-  const processUpvote = useCallback((updatedComment) => {
+  const updateComment = useCallback((updatedComment) => {
       const updatedComments = comments.reduce((list, data) => {
           if (data._id === updatedComment._id) {
               list.push(updatedComment);
@@ -24,12 +25,22 @@ const Discussion = () => {
       }, []);
       setComments(updatedComments);
   });
+  const pushReply = useCallback((reply) => {
+      setReplies({...replies, ...reply.reduce((dict, data) => {dict[data._id] = data; return dict;}, {})});
+  });
 
   useEffect(() => {
     axios.get('/api/comments')
       .then(({data}) => {
           data.sort((c1, c2) => c1.timestamp < c2.timestamp ? 1:-1);
           setComments(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios.get('/api/replies')
+      .then(({data}) => {
+          setReplies(data);
       })
       .catch((error) => {
         console.log(error);
@@ -54,13 +65,20 @@ const Discussion = () => {
                 <Typography variant="h5" mb={4} fontWeight="bold">
                   Discussion
                 </Typography>
-                <AddComment mb={4} user={user} pushComment={pushComment} />
+                <AddComment mb={4} user={user} pushComment={pushComment} isReply={false} />
               </Box>
               <Divider variant="middle" />
               <Box sx={{ mt: 6 }}>
                   {comments.map(comment =>
                       <Box sx={{ mt: 4, mx: 2 }} key={comment._id}>
-                            <Comment comment={comment} users={users} user={user} processUpvote={processUpvote} />
+                            <Comment comment={comment}
+                                     users={users}
+                                     user={user}
+                                     updateComment={updateComment}
+                                     pushComment={pushComment}
+                                     pushReply={pushReply}
+                                     replies={replies}
+                            />
                       </Box>
                   )}
               </Box>

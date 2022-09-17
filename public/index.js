@@ -1,6 +1,26 @@
 "use strict";
 
 const createCommentBody = () => {
+
+// HTTP functions
+const get = async (url) => {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {'Content-Type': 'application/json'}
+    });
+
+    return await response.json();
+};
+
+const post = async (url, body) => {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    });
+
+    return await response.json();
+};
     const commentBody = document.createElement("div");
     commentBody.className = "comment-body";
 

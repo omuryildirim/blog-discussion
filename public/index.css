@@ -18,6 +18,7 @@ body {
     background: #FFFFFF;
     margin: 30px auto auto;
     padding: 38px 49px;
+    overflow-y: auto;
 }
 
 .header {
@@ -39,7 +40,7 @@ body {
 }
 
 .comment {
-    display: flex;
+    display: inline-flex;
 }
 
 #comments-section .comment {

@@ -1,6 +1,5 @@
 "use strict";
 
-const createCommentBody = () => {
 // Global variables
 let users;
 let user;
@@ -24,21 +23,25 @@ const post = async (url, body) => {
 
     return await response.json();
 };
+
+// DOM manipulators
+// Functions that adds comment to comment section
+const createCommentBody = ({userid, timestamp, message, upvotes, _id}) => {
     const commentBody = document.createElement("div");
     commentBody.className = "comment-body";
 
-    commentBody.appendChild(createCommentHeader());
-    commentBody.appendChild(createTimeAgo());
-    commentBody.appendChild(createMessage());
-    commentBody.appendChild(createUpvoteButton());
+    commentBody.appendChild(createCommentHeader(users[userid].name));
+    commentBody.appendChild(createTimeAgo(timestamp));
+    commentBody.appendChild(createMessage(message));
+    commentBody.appendChild(createUpvoteButton(_id, upvotes));
 
     return commentBody;
 }
 
-const createCommentHeader = () => {
+const createCommentHeader = (username) => {
     const commentHeader = document.createElement("div");
     commentHeader.className = "comment-header";
-    commentHeader.textContent = "Telia";
+    commentHeader.textContent = username;
     return commentHeader;
 }
 
@@ -49,17 +52,18 @@ const createTimeAgo = () => {
     return commentTimeAgo;
 }
 
-const createMessage = () => {
+const createMessage = (text) => {
     const message = document.createElement("div");
     message.className = "message";
-    message.textContent = document.getElementById("text-input").value;
+    message.textContent = text;
     document.getElementById("text-input").value = "";
     return message;
 }
 
-const createUpvoteButton = () => {
+const createUpvoteButton = (id, upvotes) => {
     const actionButton = document.createElement("div");
     actionButton.className = "action-button";
+    actionButton.dataset.id = id;
 
     const upvoteIcon = document.createElement("div");
     upvoteIcon.className = "upvote-icon";
@@ -68,6 +72,18 @@ const createUpvoteButton = () => {
     const text = document.createElement("div");
     text.className = "action-button-text";
     text.textContent = "Upvote";
+
+    if (upvotes.length) {
+        const points = document.createElement("div");
+        points.className = "points";
+        points.textContent = upvotes.length;
+        actionButton.appendChild(points);
+
+        if (upvotes.includes(user._id)) {
+            actionButton.className += " upvoted";
+            text.textContent += "d";
+        }
+    }
 
     actionButton.appendChild(upvoteIcon);
     actionButton.appendChild(text);
@@ -82,6 +98,7 @@ const addCommentToHTML = (data) => {
 
     const avatar = document.createElement("div");
     avatar.className = "avatar";
+    avatar.style.backgroundImage = `url(public/images/${users[data.userid].image})`;
 
     comment.appendChild(avatar);
     comment.appendChild(createCommentBody(data));
@@ -113,8 +130,6 @@ const upvote = (event) => {
 
 }
 
-document.querySelectorAll(".upvote-button").forEach(element => {
-    element.addEventListener("click", event => upvote(event));
 // On click events
 document.getElementById("comment-button").addEventListener("click", event => {
     post("/api/comment", {

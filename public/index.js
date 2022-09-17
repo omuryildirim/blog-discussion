@@ -45,10 +45,42 @@ const createCommentHeader = (username) => {
     return commentHeader;
 }
 
-const createTimeAgo = () => {
+const calculateTimeAgo = (time) => {
+  const constructAgoText = (number, unit) => `${number} ${unit} ago`;
+  const seconds = Math.floor((new Date() - time) / 1000);
+
+  let interval = seconds / 31536000;
+
+  if (interval > 1) {
+    return constructAgoText(Math.floor(interval), "years");
+  }
+  interval = seconds / 2592000;
+  if (interval > 1) {
+    return constructAgoText(Math.floor(interval), "months");
+  }
+  interval = seconds / 86400;
+  if (interval > 1) {
+    return constructAgoText(Math.floor(interval), "days");
+  }
+  interval = seconds / 3600;
+  if (interval > 1) {
+    return constructAgoText(Math.floor(interval), "hours");
+  }
+  interval = seconds / 60;
+  if (interval > 1) {
+    return constructAgoText(Math.floor(interval), "minutes");
+  }
+  if (seconds > 10) {
+    return constructAgoText(Math.floor(seconds), "seconds");
+  }
+
+  return "just now";
+}
+
+const createTimeAgo = (time) => {
     const commentTimeAgo = document.createElement("div");
     commentTimeAgo.className = "comment-time-ago";
-    commentTimeAgo.textContent = "・ 45 min ago";
+    commentTimeAgo.textContent = `・ ${calculateTimeAgo(time)}`;
     return commentTimeAgo;
 }
 

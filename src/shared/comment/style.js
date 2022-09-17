@@ -12,5 +12,4 @@ export const Points = styled.span`
     margin-top: 0px;
     font-weight: 600;
     left: 20px;
-}
 `;

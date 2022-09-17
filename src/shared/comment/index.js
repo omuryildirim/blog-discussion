@@ -3,10 +3,23 @@ import {UserAvatar} from "../avatar";
 import React from "react";
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import {CommentWrapper, Points} from "./style";
+import axios from "axios";
 
-export const Comment = ({comment: {userid, timestamp, upvotes, message}, users, user}) => {
+export const Comment = ({comment: {userid, timestamp, upvotes, message, _id}, users, user, processUpvote}) => {
     const messageOwner = users[userid];
     const isUserUpvoted = upvotes.includes(user._id);
+
+    const upvote = () => {
+        axios.post(`/api/comment/${_id}/upvote`, {
+            upvoter: user._id
+          })
+          .then((response) => {
+            processUpvote(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    }
 
     return (
         <CommentWrapper>
@@ -22,7 +35,12 @@ export const Comment = ({comment: {userid, timestamp, upvotes, message}, users, 
                     <Typography component="subtitle1">{message}</Typography>
                 </Box>
                 <Box>
-                    <Button startIcon={<ArrowDropUpIcon />} color="neutral" className={isUserUpvoted ? "upvoted" : ""}>
+                    <Button startIcon={<ArrowDropUpIcon />}
+                            color="neutral"
+                            className={isUserUpvoted ? "upvoted" : ""}
+                            onClick={upvote}
+                            disabled={isUserUpvoted}
+                    >
                         {upvotes.length ? (
                             <>
                                 <Points>{upvotes.length}</Points>

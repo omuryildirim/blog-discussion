@@ -21,4 +21,14 @@ module.exports = (router) => {
         }
       });
   });
+
+  router.post('/comment/:id/upvote', (req, res) => {
+    Comment.findOneAndUpdate({_id: req.params.id}, { $push: { upvotes: req.body.upvoter} }, {new: true}, (error, comment) => {
+      if (error) {
+        res.status(500).send(JSON.stringify(error));
+      }
+
+      res.status(200).send(comment);
+    });
+  });
 };

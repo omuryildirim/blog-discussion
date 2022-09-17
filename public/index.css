@@ -37,6 +37,7 @@ body {
     height: 30px;
     background: #0234fe;
     border-radius: 42.25px;
+    background-size: cover;
 }
 
 .comment {

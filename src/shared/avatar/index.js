@@ -1,11 +1,9 @@
 import {Avatar} from "@mui/material";
 
-export const UserAvatar = ({ picture }) => {
+export const UserAvatar = ({ image, name }) => {
     return (
         <>
-            <Avatar sx={{ bgcolor: `#${Math.floor(Math.random()*16777215).toString(16)}`, height: 34, width: 34 }} >
-                { picture }
-            </Avatar>
+            <Avatar alt={name} src={`/public/images/${image}`} sx={{height: 34, width: 34 }} />
         </>
     );
 }

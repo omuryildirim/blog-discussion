@@ -1,23 +1,16 @@
 const client = new WebSocket('ws://localhost:3001/websockets');
 
-export const websocket = (updateComment, pushReply) => {
+export const websocket = (onMessageReceive) => {
     client.onopen = () => {
         console.log('WebSocket Client Connected');
     };
 
     client.onmessage = (message) => {
         const data = JSON.parse(message.data);
-        console.log(message);
         try {
-            if (data.userId !== 'userId') {
-                if (data.isReply) {
-                    pushReply([data.comment]);
-                } else {
-                    updateComment(data.comment);
-                }
-            }
-        } catch (err) {
-            console.log(err);
+            onMessageReceive(data);
+        } catch (error) {
+            console.log(error);
         }
     };
 

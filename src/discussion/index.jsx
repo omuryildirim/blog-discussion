@@ -1,91 +1,40 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {AddComment} from '../shared/add-comment';
+import React, {useContext} from 'react';
+import {AddComment} from '../shared/components/add-comment';
 import {Box, CircularProgress, Container, Divider, Typography} from '@mui/material';
-import {Comment} from '../shared/comment';
+import {Comment} from '../shared/components/comment';
 import {DiscussionWrapper} from './style';
-import axios from 'axios';
 import {websocket} from '../websocket';
+import {UsersContext} from '../shared/contexts';
+import {CommentsContext} from '../shared/contexts';
+import {updateComment} from '../shared/utils/helpers';
 
 const Discussion = () => {
-    const [comments, setComments] = useState(null);
-    const [replies, setReplies] = useState(null);
-    const [users, setUsers] = useState(null);
-    const [user, setUser] = useState(null);
-    const pushComment = useCallback((comment) => {
-        setComments([comment, ...comments]);
-    });
-    const updateComment = useCallback((updatedComment) => {
-        const updatedComments = comments.reduce((list, data) => {
-            if (data._id === updatedComment._id) {
-                list.push(updatedComment);
-            } else {
-                list.push(data);
-            }
+    const {users, user} = useContext(UsersContext);
+    const {comments, setComments, replies, setReplies} = useContext(CommentsContext);
 
-            return list;
-        }, []);
-        setComments(updatedComments);
-    });
-    const pushReply = useCallback((reply) => {
-        setReplies({...replies, ...reply.reduce((dict, data) => {
-            dict[data._id] = data; return dict;
-        }, {})});
-    });
+    const onMessageReceive = (data) => {
+        if (data.isReply) {
+            setReplies({...replies, [data.comment._id]: data.comment});
+        } else {
+            updateComment({comments, updatedComment: data.comment, setComments});
+        }
+    };
+    const sendCommentToWebSocket = websocket(onMessageReceive);
 
-    useEffect(() => {
-        axios.get('/api/comments')
-            .then(({data}) => {
-                data.sort((c1, c2) => (c1.timestamp < c2.timestamp ? 1 : -1));
-                setComments(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        axios.get('/api/replies')
-            .then(({data}) => {
-                setReplies(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        axios.get('/api/users')
-            .then(({data}) => setUsers(data))
-            .catch((error) => {
-                console.log(error);
-            });
-        axios.get('/api/user')
-            .then(({data}) => {
-                setUser(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }, []);
-
-    const sendCommentToWebSocket = websocket(updateComment, pushReply);
-
-    if (comments && users && user) {
+    if (comments && replies && users && user) {
         return (
             <DiscussionWrapper>
                 <Container className="container">
                     <Box sx={{mb: 6, mx: 2}}>
                         <Typography variant="h5" mb={4} fontWeight="bold">
-                  Discussion
+                            Discussion
                         </Typography>
-                        <AddComment mb={4} user={user} pushComment={pushComment} isReply={false} />
+                        <AddComment mb={4} isReply={false} />
                     </Box>
                     <Divider variant="middle" />
                     <Box sx={{mt: 6}}>
                         {comments.map(comment => <Box sx={{mt: 4, mx: 2}} key={comment._id}>
-                            <Comment comment={comment}
-                                users={users}
-                                user={user}
-                                updateComment={updateComment}
-                                pushComment={pushComment}
-                                pushReply={pushReply}
-                                replies={replies}
-                                sendCommentToWebSocket={sendCommentToWebSocket}
-                            />
+                            <Comment comment={comment} sendCommentToWebSocket={sendCommentToWebSocket} />
                         </Box>
                         )}
                     </Box>

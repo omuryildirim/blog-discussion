@@ -24,6 +24,13 @@ const App = () => {
         [comments, replies]
     );
 
+    useEffect(() => {
+        usersService.getUsers().then(data => setUsers(data));
+        usersService.getUser().then(data => setUser(data));
+        commentsService.getComments().then(data => setComments(data));
+        commentsService.getReplies().then(data => setReplies(data));
+    }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />

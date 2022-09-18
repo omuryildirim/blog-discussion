@@ -5,7 +5,17 @@ module.exports = {
         es6: true,
         node: true
     },
-    plugins: ['ghost'],
+    plugins: [
+        'ghost',
+        'react'
+    ],
+    parser: '@babel/eslint-parser',
+    parserOptions: {
+        requireConfigFile: false,
+        babelOptions: {
+          presets: ["@babel/preset-react"]
+        }
+    },
     extends: [
         'plugin:ghost/node'
     ],
@@ -18,7 +28,7 @@ module.exports = {
     },
     overrides: [
         {
-            files: 'frontend/**',
+            files: 'src/**',
             rules: {
                 'ghost/node/no-restricted-require': ['off', [
                     // If we make the frontend entirely independent, these have to be solved too
@@ -32,6 +42,9 @@ module.exports = {
                         message: 'Invalid require of core/server from core/frontend.'
                     }
                 ]]
+            },
+            parserOptions: {
+                "sourceType": "module",
             }
         },
         {

@@ -1,5 +1,5 @@
 import {Button, Grid, TextField} from '@mui/material';
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useCallback} from 'react';
 import {UserAvatar} from '../avatar';
 import {UsersContext} from '../../contexts';
 import {commentsService} from '../../services';
@@ -11,7 +11,7 @@ export const AddComment = ({isReply, parentCommentId, isParentReply, setIsReplyE
     const {comments, setComments, replies, setReplies} = useContext(CommentsContext);
     const [message, setMessage] = useState('');
 
-    const addComment = () => {
+    const addComment = useCallback(() => {
         if (isReply) {
             commentsService.reply({parentCommentId, message, userId: _id})
                 .then(({comment, reply}) => {
@@ -26,7 +26,7 @@ export const AddComment = ({isReply, parentCommentId, isParentReply, setIsReplyE
                     setMessage('');
                 });
         }
-    };
+    }, [parentCommentId, message, _id, setIsReplyEnabled, setMessage, replies, setReplies, isParentReply, comments, setComments]);
 
     return (
         <Grid container spacing={2}>

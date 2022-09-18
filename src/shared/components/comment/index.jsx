@@ -1,6 +1,6 @@
 import {Box, Button, Grid, Typography} from '@mui/material';
 import {UserAvatar} from '../avatar';
-import React, {useState, useCallback, useContext} from 'react';
+import React, {useState, useCallback, useContext, useEffect} from 'react';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import {CommentWrapper, Points, VerticalLine} from './style';
 import {AddComment} from '../add-comment';
@@ -9,8 +9,9 @@ import {CommentsContext} from '../../contexts';
 import {commentsService} from '../../services';
 import {updateComment} from '../../utils/helpers';
 import {format} from 'timeago.js';
+import {UpvoteEvent} from "../../constants";
 
-export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, replies: commentReplies, isReply}, sendCommentToWebSocket}) => {
+export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, replies: commentReplies, isReply}, sendMessageToWebSocket}) => {
     const {users, user} = useContext(UsersContext);
     const {replies, setReplies, comments, setComments} = useContext(CommentsContext);
 
@@ -26,9 +27,12 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                 } else {
                     updateComment({updatedComment: response, comments, setComments});
                 }
-                sendCommentToWebSocket(response);
+                sendMessageToWebSocket({
+                    event: UpvoteEvent,
+                    comment: response
+                });
             });
-    });
+    }, [_id, user, replies, comments, setComments, setReplies]);
 
     return (
         <CommentWrapper>
@@ -43,10 +47,10 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                 </Grid>
                 <Grid item xs>
                     <Box sx={{mb: 1}}>
-                        <Typography component="subtitle1" fontWeight="bold">{messageOwner.name}</Typography><Typography fontSize={11} component="subtitle2"> &#8226; {format(timestamp)}</Typography>
+                        <Typography variant="subtitle1" fontWeight="bold">{messageOwner.name}</Typography><Typography fontSize={11} variant="subtitle2"> &#8226; {format(timestamp)}</Typography>
                     </Box>
                     <Box>
-                        <Typography component="subtitle1">{message}</Typography>
+                        <Typography variant="subtitle1">{message}</Typography>
                     </Box>
                     <Box>
                         <Button startIcon={<ArrowDropUpIcon />}
@@ -79,7 +83,7 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                     )}
                     {commentReplies.length ? (
                         commentReplies.map(id => <Box sx={{mt: 4, mx: 2}} key={id}>
-                            <Comment comment={replies[id]} sendCommentToWebSocket={sendCommentToWebSocket}
+                            <Comment comment={replies[id]} sendMessageToWebSocket={sendMessageToWebSocket}
                             />
                         </Box>
                         )

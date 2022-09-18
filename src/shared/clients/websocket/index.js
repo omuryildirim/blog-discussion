@@ -1,6 +1,8 @@
-const client = new WebSocket('ws://localhost:3001/websockets');
+let client;
 
-export const websocket = (onMessageReceive) => {
+const websocket = (onMessageReceive) => {
+    client = client || new WebSocket('ws://localhost:3001/websockets');
+
     client.onopen = () => {
         console.log('WebSocket Client Connected');
     };
@@ -18,12 +20,10 @@ export const websocket = (onMessageReceive) => {
         console.log('Connection Error');
     };
 
-    const sendCommentToWebSocket = (comment) => {
-        client.send(JSON.stringify({
-            event: 'comment:upvote',
-            comment
-        }));
-    };
 
-    return sendCommentToWebSocket;
+    return (message) => {
+        client.send(JSON.stringify(message));
+    };
 };
+
+export default websocket;

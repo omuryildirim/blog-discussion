@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
     env: {
+        browser: true,
         es6: true,
         node: true
     },
@@ -17,14 +18,17 @@ module.exports = {
         }
     },
     extends: [
-        'plugin:ghost/node'
+        'plugin:ghost/node',
+        'plugin:react/recommended'
     ],
     rules: {
         // @TODO: remove this rule once it's turned into "error" in the base plugin
         'no-shadow': 'error',
         'no-console': 'warn',
         'no-var': 'error',
-        'one-var': ['error', 'never']
+        'one-var': ['error', 'never'],
+        // React
+        "react/prop-types": "off"
     },
     overrides: [
         {

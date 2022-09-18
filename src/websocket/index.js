@@ -1,4 +1,4 @@
-const client = new WebSocket("ws://localhost:3001/websockets");
+const client = new WebSocket('ws://localhost:3001/websockets');
 
 export const websocket = (updateComment, pushReply) => {
     client.onopen = () => {
@@ -9,7 +9,7 @@ export const websocket = (updateComment, pushReply) => {
         const data = JSON.parse(message.data);
         console.log(message);
         try {
-            if (data.userId !== "userId") {
+            if (data.userId !== 'userId') {
                 if (data.isReply) {
                     pushReply([data.comment]);
                 } else {
@@ -17,7 +17,7 @@ export const websocket = (updateComment, pushReply) => {
                 }
             }
         } catch (err) {
-          console.log(err);
+            console.log(err);
         }
     };
 
@@ -27,10 +27,10 @@ export const websocket = (updateComment, pushReply) => {
 
     const sendCommentToWebSocket = (comment) => {
         client.send(JSON.stringify({
-            event: "comment:upvote",
+            event: 'comment:upvote',
             comment
         }));
     };
 
     return sendCommentToWebSocket;
-}
+};

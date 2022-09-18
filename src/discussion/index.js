@@ -4,6 +4,7 @@ import {Box, CircularProgress, Container, Divider, Typography} from "@mui/materi
 import {Comment} from "../shared/comment";
 import {DiscussionWrapper} from "./style";
 import axios from "axios";
+import {websocket} from "../websocket";
 
 const Discussion = () => {
   const [comments, setComments] = useState(null);
@@ -51,11 +52,15 @@ const Discussion = () => {
         console.log(error);
       });
     axios.get('/api/user')
-      .then(({data}) => setUser(data))
+      .then(({data}) => {
+          setUser(data);
+      })
       .catch((error) => {
         console.log(error);
       });
   }, [])
+
+  const sendCommentToWebSocket = websocket(updateComment, pushReply);
 
   if (comments && users && user) {
     return (
@@ -78,6 +83,7 @@ const Discussion = () => {
                                      pushComment={pushComment}
                                      pushReply={pushReply}
                                      replies={replies}
+                                     sendCommentToWebSocket={sendCommentToWebSocket}
                             />
                       </Box>
                   )}

@@ -6,7 +6,7 @@ import {CommentWrapper, Points, VerticalLine} from "./style";
 import axios from "axios";
 import {AddComment} from "../add-comment";
 
-export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, replies: commentReplies, isReply}, users, user, updateComment, pushReply, replies}) => {
+export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, replies: commentReplies, isReply}, users, user, updateComment, pushReply, replies, sendCommentToWebSocket}) => {
     const messageOwner = users[userId];
     const isUserUpvoted = upvotes.includes(user._id);
     const [isReplyEnabled, setIsReplyEnabled] = useState(false);
@@ -21,6 +21,7 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
               } else {
                   updateComment(response.data);
               }
+              sendCommentToWebSocket(response.data);
           })
           .catch((error) => {
             console.log(error);
@@ -96,6 +97,7 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                                      updateComment={updateComment}
                                      pushReply={pushReply}
                                      replies={replies}
+                                     sendCommentToWebSocket={sendCommentToWebSocket}
                             />
                       </Box>
                   )

@@ -1,30 +1,32 @@
 import {Box, Button, Grid, Typography} from '@mui/material';
 import {UserAvatar} from '../avatar';
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useContext} from 'react';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import {CommentWrapper, Points, VerticalLine} from './style';
-import axios from 'axios';
 import {AddComment} from '../add-comment';
+import {UsersContext} from '../../contexts';
+import {CommentsContext} from '../../contexts';
+import {commentsService} from '../../services';
+import {updateComment} from '../../utils/helpers';
+import {format} from 'timeago.js';
 
-export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, replies: commentReplies, isReply}, users, user, updateComment, pushReply, replies, sendCommentToWebSocket}) => {
+export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, replies: commentReplies, isReply}, sendCommentToWebSocket}) => {
+    const {users, user} = useContext(UsersContext);
+    const {replies, setReplies, comments, setComments} = useContext(CommentsContext);
+
     const messageOwner = users[userId];
     const isUserUpvoted = upvotes.includes(user._id);
     const [isReplyEnabled, setIsReplyEnabled] = useState(false);
 
     const upvote = useCallback(() => {
-        axios.post(`/api/comment/${_id}/upvote`, {
-            upvoter: user._id
-        })
+        commentsService.upvoteComment({commentId: _id, userId: user._id})
             .then((response) => {
                 if (isReply) {
-                    pushReply([response.data]);
+                    setReplies({...replies, [response._id]: response});
                 } else {
-                    updateComment(response.data);
+                    updateComment({updatedComment: response, comments, setComments});
                 }
-                sendCommentToWebSocket(response.data);
-            })
-            .catch((error) => {
-                console.log(error);
+                sendCommentToWebSocket(response);
             });
     });
 
@@ -41,7 +43,7 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                 </Grid>
                 <Grid item xs>
                     <Box sx={{mb: 1}}>
-                        <Typography component="subtitle1" fontWeight="bold">{messageOwner.name}</Typography><Typography fontSize={11} component="subtitle2"> &#8226; {timestamp}</Typography>
+                        <Typography component="subtitle1" fontWeight="bold">{messageOwner.name}</Typography><Typography fontSize={11} component="subtitle2"> &#8226; {format(timestamp)}</Typography>
                     </Box>
                     <Box>
                         <Typography component="subtitle1">{message}</Typography>
@@ -69,34 +71,15 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                         <Button color="neutral" onClick={() => setIsReplyEnabled(!isReplyEnabled)}>Reply</Button>
                     </Box>
                     {isReplyEnabled ? (
-                        <Box>
-                            <AddComment user={user}
-                                isReply={true}
-                                parentId={_id}
-                                pushComment={({comment, reply}) => {
-                                    if (isReply) {
-                                        pushReply([reply, comment]);
-                                    } else {
-                                        pushReply([reply]);
-                                        updateComment(comment);
-                                    }
-
-                                    setIsReplyEnabled(false);
-                                }}
-                            />
+                        <Box sx={{mt: 4, mx: 2}}>
+                            <AddComment isReply={true} isParentReply={isReply} parentCommentId={_id} setIsReplyEnabled={status => setIsReplyEnabled(status)} />
                         </Box>
                     ) : (
                         <></>
                     )}
                     {commentReplies.length ? (
                         commentReplies.map(id => <Box sx={{mt: 4, mx: 2}} key={id}>
-                            <Comment comment={replies[id]}
-                                users={users}
-                                user={user}
-                                updateComment={updateComment}
-                                pushReply={pushReply}
-                                replies={replies}
-                                sendCommentToWebSocket={sendCommentToWebSocket}
+                            <Comment comment={replies[id]} sendCommentToWebSocket={sendCommentToWebSocket}
                             />
                         </Box>
                         )

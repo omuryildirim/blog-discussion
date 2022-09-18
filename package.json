@@ -25,6 +25,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "styled-components": "^5.3.5",
+    "timeago.js": "^4.0.2",
     "ws": "^8.8.1"
   },
   "scripts": {
@@ -35,7 +36,8 @@
     "eject": "react-app-rewired eject",
     "lint:server": "eslint server/**/*.js",
     "lint:frontend": "eslint src/**/*.{js,jsx}",
-    "lint": "yarn lint:server && yarn lint:frontend"
+    "lint": "yarn lint:server && yarn lint:frontend",
+    "lint:fix": "yarn lint:server --fix && yarn lint:frontend --fix"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

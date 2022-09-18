@@ -1,35 +1,29 @@
 import {Button, Grid, TextField} from '@mui/material';
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {UserAvatar} from '../avatar';
-import axios from 'axios';
+import {UsersContext} from '../../contexts';
+import {commentsService} from '../../services';
+import {CommentsContext} from '../../contexts';
+import {updateCommentWithNewReply} from './helpers';
 
-export const AddComment = ({user: {image, _id, name}, pushComment, isReply, parentId}) => {
+export const AddComment = ({isReply, parentCommentId, isParentReply, setIsReplyEnabled}) => {
+    const {user: {image, _id, name}} = useContext(UsersContext);
+    const {comments, setComments, replies, setReplies} = useContext(CommentsContext);
     const [message, setMessage] = useState('');
 
     const addComment = () => {
         if (isReply) {
-            axios.post(`/api/comment/${parentId}/reply`, {
-                userId: _id,
-                message
-            })
-                .then((response) => {
-                    pushComment(response.data);
+            commentsService.reply({parentCommentId, message, userId: _id})
+                .then(({comment, reply}) => {
+                    updateCommentWithNewReply({updatedComment: comment, reply, replies, setReplies, isParentReply, comments, setComments});
+                    setIsReplyEnabled(false);
                     setMessage('');
-                })
-                .catch((error) => {
-                    console.log(error);
                 });
         } else {
-            axios.post('/api/comment', {
-                userId: _id,
-                message
-            })
+            commentsService.addComment({message, userId: _id})
                 .then((response) => {
-                    pushComment(response.data);
+                    setComments([response, ...comments]);
                     setMessage('');
-                })
-                .catch((error) => {
-                    console.log(error);
                 });
         }
     };

@@ -20,7 +20,6 @@ const websocket = (onMessageReceive) => {
         console.log('Connection Error');
     };
 
-
     return (message) => {
         client.send(JSON.stringify(message));
     };

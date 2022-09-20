@@ -8,8 +8,8 @@ import {mockComments, mockReplies} from '../../__mocks__/comments';
 import {mockUser, mockUsers} from '../../__mocks__/users';
 import {ThemeProvider} from '@mui/material';
 import {theme} from '../theme';
-import {updateComment} from "../shared/utils/helpers";
-import {UpvoteEvent} from "../shared/constants";
+import {updateComment} from '../shared/utils/helpers';
+import {UpvoteEvent} from '../shared/constants';
 
 jest.mock('../shared/clients/websocket');
 jest.mock('../shared/utils/helpers');
@@ -56,8 +56,7 @@ describe('Discussion', () => {
 
     it('should execute onMessageReceive function', () => {
         // Execute input function
-        websocket.mockImplementationOnce(inputFunction =>
-            inputFunction({event: UpvoteEvent, comment: {isReply: true, _id: 'mock-id'}}) ||
+        websocket.mockImplementationOnce(inputFunction => inputFunction({event: UpvoteEvent, comment: {isReply: true, _id: 'mock-id'}}) ||
             inputFunction({event: UpvoteEvent, comment: {isReply: false, _id: 'mock-id'}}));
 
         const setRepliesMock = jest.fn();
@@ -69,15 +68,15 @@ describe('Discussion', () => {
 
         expect(setRepliesMock).toHaveBeenCalledWith({
             ...mockReplies,
-            "mock-id": {isReply: true, _id: 'mock-id'}
+            'mock-id': {isReply: true, _id: 'mock-id'}
         });
 
         expect(updateComment).toHaveBeenCalledWith({
-            "comments": mockComments,
-            "setComments": "mock-set-comments",
-            "updatedComment": {
+            comments: mockComments,
+            setComments: 'mock-set-comments',
+            updatedComment: {
                 isReply: false,
-                "_id": "mock-id"
+                _id: 'mock-id'
             }
         });
 

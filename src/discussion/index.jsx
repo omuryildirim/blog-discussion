@@ -6,15 +6,13 @@ import {DiscussionWrapper} from './style';
 import websocket from '../shared/clients/websocket';
 import {UsersContext} from '../shared/contexts';
 import {CommentsContext} from '../shared/contexts';
-import {updateComment} from '../shared/utils/helpers';
-import {UpvoteEvent} from "../shared/constants";
-import {processWebSocketMessage} from "./helpers";
+import {processWebSocketMessage} from './helpers';
 
 const Discussion = () => {
     const {users, user} = useContext(UsersContext);
     const {comments, setComments, replies, setReplies} = useContext(CommentsContext);
 
-    const onMessageReceive = useCallback((receivedMessage) => processWebSocketMessage({receivedMessage, replies, setReplies, comments, setComments}),
+    const onMessageReceive = useCallback(receivedMessage => processWebSocketMessage({receivedMessage, replies, setReplies, comments, setComments}),
         [replies, setReplies, comments, setComments]
     );
 

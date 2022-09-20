@@ -1,17 +1,17 @@
 import '@testing-library/jest-dom';
 import React from 'react';
-import App from "./App";
+import App from './App';
 import * as services from './shared/services';
-import { render, screen } from "@testing-library/react";
+import {render, screen} from '@testing-library/react';
 
 jest.mock('./shared/services');
 
-describe("App", () => {
+describe('App', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
-    it("should render", () => {
+    it('should render', () => {
         // Resolve requests with empty data
         services.usersService.getUsers.mockResolvedValueOnce({});
         services.usersService.getUser.mockResolvedValueOnce({});
@@ -21,7 +21,7 @@ describe("App", () => {
         const component = render(<App />);
 
         // check if discussion component is rendered
-        expect(screen.getByTestId("loading-wrapper")).toBeVisible();
+        expect(screen.getByTestId('loading-wrapper')).toBeVisible();
 
         component.unmount();
     });

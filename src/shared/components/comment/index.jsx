@@ -9,7 +9,7 @@ import {CommentsContext} from '../../contexts';
 import {commentsService} from '../../services';
 import {updateComment} from '../../utils/helpers';
 import {format} from 'timeago.js';
-import {UpvoteEvent} from "../../constants";
+import {UpvoteEvent} from '../../constants';
 
 export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, replies: commentReplies, isReply}, sendMessageToWebSocket}) => {
     const {users, user} = useContext(UsersContext);

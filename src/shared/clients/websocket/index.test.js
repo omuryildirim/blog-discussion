@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
-import {mockComments} from "../../../../__mocks__/comments";
-import websocket from "./index";
+import {mockComments} from '../../../../__mocks__/comments';
+import websocket from './index';
 
 const sendMock = jest.fn();
 
-describe("Websocket", () => {
+describe('Websocket', () => {
     const originalWebSocket = WebSocket;
     let onMessage;
     const webSocketMock = class {
@@ -13,27 +13,27 @@ describe("Websocket", () => {
         set onmessage(onmessageFunction) {
             onMessage = onmessageFunction;
         }
-    }
+    };
 
     beforeEach(() => {
         jest.clearAllMocks();
     });
 
     beforeAll(() => {
-       window.WebSocket = webSocketMock;
+        window.WebSocket = webSocketMock;
     });
 
     afterAll(() => {
-       window.WebSocket = originalWebSocket;
+        window.WebSocket = originalWebSocket;
     });
 
-    it("should return sendMessage", () => {
+    it('should return sendMessage', () => {
         const sendMessage = websocket();
-        sendMessage({'test': 'data'});
-        expect(sendMock).toHaveBeenCalledWith(JSON.stringify({'test': 'data'}));
+        sendMessage({test: 'data'});
+        expect(sendMock).toHaveBeenCalledWith(JSON.stringify({test: 'data'}));
     });
 
-    it("should run onMessage function", () => {
+    it('should run onMessage function', () => {
         const onMessageReceive = jest.fn();
         websocket(onMessageReceive);
 

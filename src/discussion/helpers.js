@@ -1,5 +1,5 @@
-import {UpvoteEvent} from "../shared/constants";
-import {updateComment} from "../shared/utils/helpers";
+import {UpvoteEvent} from '../shared/constants';
+import {updateComment} from '../shared/utils/helpers';
 
 export const processWebSocketMessage = ({receivedMessage, replies, setReplies, comments, setComments}) => {
     if (receivedMessage.event === UpvoteEvent) {
@@ -9,4 +9,4 @@ export const processWebSocketMessage = ({receivedMessage, replies, setReplies, c
             updateComment({comments, updatedComment: receivedMessage.comment, setComments});
         }
     }
-}
+};

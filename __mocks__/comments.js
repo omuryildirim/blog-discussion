@@ -7,7 +7,7 @@ export const mockComments = [
             "6328389375b9cc8ddf876885"
         ],
         "upvotes": [
-            "6325c5e7c7fd8afeaff45fb4"
+            "6325c5e7c7fd8afeaff45fb3"
         ],
         "timestamp": 1663580293002,
         "isReply": false,

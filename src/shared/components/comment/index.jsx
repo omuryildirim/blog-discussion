@@ -1,6 +1,6 @@
 import {Box, Button, Grid, Typography} from '@mui/material';
 import {UserAvatar} from '../avatar';
-import React, {useState, useCallback, useContext, useEffect} from 'react';
+import React, {useState, useCallback, useContext} from 'react';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import {CommentWrapper, Points, VerticalLine} from './style';
 import {AddComment} from '../add-comment';
@@ -35,7 +35,7 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
     }, [_id, user, replies, comments, setComments, setReplies]);
 
     return (
-        <CommentWrapper>
+        <CommentWrapper data-testid="comment-wrapper">
             <Grid container spacing={2} className="grid-container">
                 {commentReplies.length ? (
                     <VerticalLine />
@@ -58,6 +58,7 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                             className={isUserUpvoted ? 'upvoted' : ''}
                             onClick={upvote}
                             disabled={isUserUpvoted}
+                            data-testid="upvote-button"
                         >
                             {upvotes.length ? (
                                 <>
@@ -72,7 +73,13 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                                 <>Upvote</>
                             )}
                         </Button>
-                        <Button color="neutral" onClick={() => setIsReplyEnabled(!isReplyEnabled)}>Reply</Button>
+                        <Button
+                            color="neutral"
+                            onClick={() => setIsReplyEnabled(!isReplyEnabled)}
+                            data-testid="reply-button"
+                        >
+                            Reply
+                        </Button>
                     </Box>
                     {isReplyEnabled ? (
                         <Box sx={{mt: 4, mx: 2}}>

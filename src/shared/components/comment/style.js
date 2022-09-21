@@ -3,6 +3,12 @@ import styled from 'styled-components';
 export const CommentWrapper = styled.div`
     .grid-container {
         position: relative;
+        
+        .comment-title {
+            h6 {
+                display: inline;
+            }
+        }
     }
     
     .upvoted {

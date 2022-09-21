@@ -46,7 +46,7 @@ export const Comment = ({comment: {userId, timestamp, upvotes, message, _id, rep
                     <UserAvatar image={messageOwner.image} name={messageOwner.name} />
                 </Grid>
                 <Grid item xs>
-                    <Box sx={{mb: 1}}>
+                    <Box sx={{mb: 1}} className="comment-title">
                         <Typography variant="subtitle1" fontWeight="bold">{messageOwner.name}</Typography><Typography fontSize={11} variant="subtitle2"> &#8226; {format(timestamp)}</Typography>
                     </Box>
                     <Box>

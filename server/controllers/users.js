@@ -1,3 +1,5 @@
+// The reason mock data is stored as an array comes from the fact that
+// DB query will result as array if data is stored in a DB
 const mockUserData = [{
     name: 'Anna Karenina',
     _id: '6325c5e7c7fd8afeaff45fb3',
@@ -16,16 +18,16 @@ const mockUserData = [{
     image: 'darya.jpeg'
 }];
 
-module.exports = (router) => {
-    router.get('/user', (req, res) => {
+module.exports = {
+    getUser: (req, res) => {
         const randomIndex = Math.ceil(Math.random() * 4) - 1;
         const user = mockUserData[randomIndex];
         res.status(200).send(user);
-    });
-
-    router.get('/users', (req, res) => {
+    },
+    getUsers: (req, res) => {
         res.status(200).send(mockUserData.reduce((list, user) => {
-            list[user._id] = user; return list;
+            list[user._id] = user;
+            return list;
         }, {}));
-    });
-};
+    }
+}

@@ -6,24 +6,55 @@
   "author": "Ömür Yıldırım <omuryildirim@ymail.com>",
   "license": "MIT",
   "dependencies": {
-    "babel-plugin-import": "^1.13.5",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.5",
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "cookie-parser": "^1.4.6",
     "express": "^4.18.1",
     "mongoose": "^6.6.0",
-    "uuid": "^9.0.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5",
+    "timeago.js": "^4.0.2",
+    "ws": "^8.8.1"
   },
   "scripts": {
-    "dev": "nodemon --ignore './src' server/server.js"
+    "start": "npm run build & node server/server.js",
+    "dev": "concurrently \"react-app-rewired start\" \"nodemon --ignore './src' server/server.js\"",
+    "build": "yarn lint && yarn test --watchAll=false && react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-app-rewired eject",
+    "lint:server": "eslint server/**/*.js",
+    "lint:frontend": "eslint src/**/*.{js,jsx}",
+    "lint": "yarn lint:server && yarn lint:frontend",
+    "lint:fix": "yarn lint:server --fix && yarn lint:frontend --fix"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.19.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.4.3",
+    "babel-plugin-import": "^1.13.5",
+    "concurrently": "^7.4.0",
+    "customize-cra": "^1.0.0",
+    "eslint": "^8.23.1",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-ghost": "^2.15.1",
+    "eslint-plugin-react": "^7.31.8",
+    "jest-styled-components": "^7.1.1",
     "nodemon": "^2.0.19",
+    "react-app-rewired": "^2.2.1",
+    "react-scripts": "^5.0.1",
     "webpack-cli": "^4.10.0"
   },
   "engines": {
     "node": "^14.17.0 || ^16.13.0"
   },
+  "proxy": "http://localhost:3001",
   "browserslist": [
     ">0.2%",
     "not dead",
